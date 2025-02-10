@@ -4,6 +4,7 @@ import {
   Component,
   inject,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { EntityStore } from '../../data-access/entity.store';
 import {
@@ -26,11 +27,12 @@ import { CardComponent } from '../../ui/card/card.component';
   `,
   styles: [
     `
-      ::ng-deep .bg-light-green {
+      .bg-light-green {
         background-color: rgba(0, 250, 0, 0.1);
       }
     `,
   ],
+  encapsulation: ViewEncapsulation.None,
   imports: [CardComponent, NgOptimizedImage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: EntityStore, useClass: EntityStore<Student> }],

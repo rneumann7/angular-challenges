@@ -1,5 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { EntityStore } from '../../data-access/entity.store';
 import {
   FakeHttpService,
@@ -21,11 +21,12 @@ import { CardComponent } from '../../ui/card/card.component';
   `,
   styles: [
     `
-      ::ng-deep .bg-light-red {
+      .bg-light-red {
         background-color: rgba(250, 0, 0, 0.1);
       }
     `,
   ],
+  encapsulation: ViewEncapsulation.None,
   imports: [CardComponent, NgOptimizedImage],
   providers: [{ provide: EntityStore, useClass: EntityStore<Teacher> }],
 })
