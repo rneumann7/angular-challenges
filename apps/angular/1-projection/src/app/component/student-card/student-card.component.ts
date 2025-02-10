@@ -20,10 +20,9 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
   selector: 'app-student-card',
   template: `
     <ng-template #studentTemplate let-student>
-      <app-list-item
-        [name]="student.firstName"
-        [id]="student.id"
-        (delete)="deleteItem($event)"></app-list-item>
+      <app-list-item (delete)="deleteItem(student.id)">
+        {{ student.firstName }}
+      </app-list-item>
     </ng-template>
 
     <app-card
