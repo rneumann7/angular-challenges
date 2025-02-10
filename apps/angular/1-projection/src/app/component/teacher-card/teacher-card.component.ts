@@ -21,7 +21,7 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
   template: `
     <ng-template #teacherTemplate let-teacher>
       <app-list-item
-        [name]="teacher.firstName"
+        [name]="teacher.lastName"
         [id]="teacher.id"
         (delete)="deleteItem($event)"></app-list-item>
     </ng-template>
