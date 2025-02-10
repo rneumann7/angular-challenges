@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -11,9 +11,7 @@ import {
 @Component({
   selector: 'app-card',
   template: `
-    <div
-      class="flex w-fit flex-col gap-3 rounded-md border-2 border-black p-4"
-      [class]="customClass()">
+    <div>
       <ng-content></ng-content>
       <section>
         @for (item of list(); track item) {
@@ -32,7 +30,10 @@ import {
       </button>
     </div>
   `,
-  imports: [CommonModule],
+  imports: [NgTemplateOutlet],
+  host: {
+    class: 'border-2 border-black rounded-md p-4 w-fit flex flex-col gap-3',
+  },
 })
 export class CardComponent {
   @Output() addItem = new EventEmitter<void>();

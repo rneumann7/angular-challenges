@@ -5,7 +5,6 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  ViewEncapsulation,
 } from '@angular/core';
 import { EntityStore } from '../../data-access/entity.store';
 import {
@@ -27,10 +26,9 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
 
     <app-card
       [list]="cities()"
-      customClass="bg-light-yellow"
+      class="bg-light-yellow"
       [itemTemplate]="cityTemplate"
-      (addItem)="addNewItem()"
-      (deleteItem)="deleteItem($event)">
+      (addItem)="addNewItem()">
       <img ngSrc="assets/img/city.png" width="200" height="200" />
     </app-card>
   `,
@@ -41,7 +39,6 @@ import { ListItemComponent } from '../../ui/list-item/list-item.component';
       }
     `,
   ],
-  encapsulation: ViewEncapsulation.None,
   imports: [CardComponent, NgOptimizedImage, ListItemComponent],
   providers: [{ provide: EntityStore, useClass: EntityStore<City> }],
 })
