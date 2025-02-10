@@ -1,9 +1,10 @@
 import { NgOptimizedImage } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   inject,
   OnInit,
+  TemplateRef,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { EntityStore } from '../../data-access/entity.store';
@@ -13,13 +14,22 @@ import {
 } from '../../data-access/fake-http.service';
 import { Student } from '../../model/student.model';
 import { CardComponent } from '../../ui/card/card.component';
+import { ListItemComponent } from '../../ui/list-item/list-item.component';
 
 @Component({
   selector: 'app-student-card',
   template: `
+    <ng-template #studentTemplate let-student>
+      <app-list-item
+        [name]="student.firstName"
+        [id]="student.id"
+        (delete)="deleteItem($event)"></app-list-item>
+    </ng-template>
+
     <app-card
       [list]="students()"
       customClass="bg-light-green"
+      [itemTemplate]="studentTemplate"
       (addItem)="addNewItem()"
       (deleteItem)="deleteItem($event)">
       <img ngSrc="assets/img/student.webp" width="200" height="200" />
@@ -33,8 +43,7 @@ import { CardComponent } from '../../ui/card/card.component';
     `,
   ],
   encapsulation: ViewEncapsulation.None,
-  imports: [CardComponent, NgOptimizedImage],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CardComponent, NgOptimizedImage, ListItemComponent],
   providers: [{ provide: EntityStore, useClass: EntityStore<Student> }],
 })
 export class StudentCardComponent implements OnInit {
@@ -42,6 +51,9 @@ export class StudentCardComponent implements OnInit {
   private store = inject(EntityStore<Student>);
 
   students = this.store.entities;
+
+  @ViewChild('studentTemplate', { static: true })
+  studentTemplate!: TemplateRef<any>;
 
   ngOnInit(): void {
     this.http.fetchStudents$.subscribe((s) => this.store.addAll(s));

@@ -1,5 +1,12 @@
-import { Component, EventEmitter, input, Output } from '@angular/core';
-import { ListItemComponent } from '../list-item/list-item.component';
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  input,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -10,10 +17,11 @@ import { ListItemComponent } from '../list-item/list-item.component';
       <ng-content></ng-content>
       <section>
         @for (item of list(); track item) {
-          <app-list-item
-            [name]="item.firstName"
-            [id]="item.id"
-            (delete)="onDeleteItem($event)"></app-list-item>
+          <ng-container
+            *ngTemplateOutlet="
+              itemTemplate;
+              context: { $implicit: item }
+            "></ng-container>
         }
       </section>
 
@@ -24,7 +32,7 @@ import { ListItemComponent } from '../list-item/list-item.component';
       </button>
     </div>
   `,
-  imports: [ListItemComponent],
+  imports: [CommonModule],
 })
 export class CardComponent {
   @Output() addItem = new EventEmitter<void>();
@@ -32,6 +40,7 @@ export class CardComponent {
 
   readonly list = input<any[] | null>(null);
   readonly customClass = input('');
+  @Input() itemTemplate: TemplateRef<any> | null = null;
 
   onDeleteItem(id: number) {
     this.deleteItem.emit(id);
