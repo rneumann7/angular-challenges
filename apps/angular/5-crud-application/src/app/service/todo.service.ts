@@ -25,4 +25,9 @@ export class TodoService {
     const jsonString = JSON.stringify(todo);
     return this.http.put<Todo>(updateUrl, jsonString, this.headers);
   }
+
+  deleteTodo(todo: Todo): Observable<Todo> {
+    const deleteUrl = `${this.apiUrl}/${todo.id}`;
+    return this.http.delete<Todo>(deleteUrl, this.headers);
+  }
 }
