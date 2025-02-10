@@ -1,11 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import {
-  Component,
-  inject,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { EntityStore } from '../../data-access/entity.store';
 import {
   FakeHttpService,
@@ -47,9 +41,6 @@ export class StudentCardComponent implements OnInit {
   private store = inject(EntityStore<Student>);
 
   students = this.store.entities;
-
-  @ViewChild('studentTemplate', { static: true })
-  studentTemplate!: TemplateRef<any>;
 
   ngOnInit(): void {
     this.http.fetchStudents$.subscribe((s) => this.store.addAll(s));
