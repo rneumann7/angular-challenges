@@ -1,36 +1,18 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse,
-} from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 import { LoadingService } from '../service/loading.service';
 
-@Injectable()
-export class LoadingInterceptor implements HttpInterceptor {
-  constructor(private loadingService: LoadingService) {}
-
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler,
-  ): Observable<HttpEvent<any>> {
-    this.loadingService.setLoading(true);
-    return next.handle(req).pipe(
-      tap(
-        (event: HttpEvent<any>) => {
-          if (event instanceof HttpResponse) {
-            this.loadingService.setLoading(false);
-          }
-        },
-        (error: HttpErrorResponse) => {
-          this.loadingService.setLoading(false);
-        },
-      ),
-    );
-  }
+export function loadingInterceptor(
+  req: HttpRequest<any>,
+  next: HttpHandlerFn,
+): Observable<HttpEvent<any>> {
+  const loadingService = inject(LoadingService);
+  loadingService.setLoading(true);
+  return next(req).pipe(
+    finalize(() => {
+      loadingService.setLoading(false);
+    }),
+  );
 }
