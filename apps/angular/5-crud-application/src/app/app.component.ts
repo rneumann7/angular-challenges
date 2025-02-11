@@ -1,23 +1,41 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { randText } from '@ngneat/falso';
 import { Todo } from './model/todo.model';
+import { LoadingService } from './service/loading.service';
 import { TodoService } from './service/todo.service';
 
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule, MatProgressSpinnerModule],
   selector: 'app-root',
   template: `
-    <div *ngFor="let todo of todos">
-      {{ todo.title }}
-      <button (click)="update(todo)">Update</button>
-      <button (click)="delete(todo)">Delete</button>
+    <div *ngIf="loading$ | async" class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="!(loading$ | async)">
+      <div *ngFor="let todo of todos">
+        {{ todo.title }}
+        <button (click)="update(todo)">Update</button>
+        <button (click)="delete(todo)">Delete</button>
+      </div>
     </div>
   `,
-  styles: [],
+  styles: [
+    `
+      .spinner-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+    `,
+  ],
 })
 export class AppComponent implements OnInit {
   todos!: Todo[];
+  private loadingService = inject(LoadingService);
+  loading$ = this.loadingService.loading$;
   private toDoService = inject(TodoService);
 
   ngOnInit(): void {
